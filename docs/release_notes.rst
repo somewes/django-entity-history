@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+2.0.0
+------
+* Drop python 3.6
+* Support python 3.8, 3.9
+* Drop Django 2.0, 2.1
+* Support Django 3.0, 3.1, 3.2, 4.0, 4.1
+
+v1.3.0
+------
+* Ensure proper ordering by id when times are equal
+
 v1.2.0
 ------
 * Python 3.7
