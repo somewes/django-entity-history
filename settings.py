@@ -1,4 +1,5 @@
 import os
+import json
 
 from django.conf import settings
 
@@ -12,32 +13,26 @@ def configure_settings():
         test_db = os.environ.get('DB', None)
         if test_db is None:
             db_config = {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'NAME': 'postgres',
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'entity_history',
                 'USER': 'postgres',
                 'PASSWORD': '',
-                'HOST': 'db'
+                'HOST': 'db',
             }
         elif test_db == 'postgres':
             db_config = {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'entity_history',
                 'USER': 'postgres',
-                'NAME': 'entity_history',
-            }
-        elif test_db == 'local':
-            db_config = {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'USER': 'postgres',
-                'NAME': 'entity_history',
-                'HOST': 'db'
-            }
-        elif test_db == 'sqlite':
-            db_config = {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': 'entity_history',
+                'PASSWORD': '',
+                'HOST': 'db',
             }
         else:
             raise RuntimeError('Unsupported test DB {0}'.format(test_db))
+
+        # Check env for db override (used for github actions)
+        if os.environ.get('DB_SETTINGS'):
+            db_config = json.loads(os.environ.get('DB_SETTINGS'))
 
         settings.configure(
             TEST_RUNNER='django_nose.NoseTestSuiteRunner',
